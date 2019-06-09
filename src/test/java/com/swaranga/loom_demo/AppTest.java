@@ -1,4 +1,4 @@
-package com.amazon.loom_demo;
+package com.swaranga.loom_demo;
 
 import static org.junit.Assert.assertTrue;
 
