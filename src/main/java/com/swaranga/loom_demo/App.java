@@ -33,7 +33,7 @@ public class App {
 
 		ServletHolder serHol = ctx.addServlet(ServletContainer.class, "/rest/*");
 		serHol.setInitOrder(1);
-		serHol.setInitParameter("jersey.config.server.provider.packages", "com.amazon.loom_demo");
+		serHol.setInitParameter("jersey.config.server.provider.packages", "com.swaranga.loom_demo");
 
 		try {
 			System.out.println("Starting server");
