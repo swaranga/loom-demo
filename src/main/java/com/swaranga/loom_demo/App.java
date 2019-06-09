@@ -40,18 +40,12 @@ public class App {
 			server.start();
 
 			System.out.println("Server started");
-			// server.join();
-
-			// System.out.println("Server join exited");
-
-			new CompletableFuture<String>().join();
-			System.out.println("CompletableFuture join exited");
+			server.join();
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			System.err.println("Exception: " + ex.getMessage());
 			System.out.println("Exception: " + ex.getMessage());
 		} finally {
-			// server.destroy();
+			server.destroy();
 		}
 	}
 
@@ -69,34 +63,30 @@ public class App {
 			return customPool();
 		}
 	}
-	
+
 	private static ThreadPool customPool() {
-	    final ThreadPoolExecutor executor = new ThreadPoolExecutor(100, 100, 100, TimeUnit.SECONDS , new LinkedBlockingQueue<Runnable>());
-	    executor.prestartAllCoreThreads();
-	    
+		final ThreadPoolExecutor executor = new ThreadPoolExecutor(100, 100, 100, TimeUnit.SECONDS,
+				new LinkedBlockingQueue<Runnable>());
+		executor.prestartAllCoreThreads();
+
 		return new ThreadPool() {
 			public void execute(Runnable command) {
-				System.out.println("Executing via custom pool");
 				executor.execute(command);
 			}
 
 			public void join() throws InterruptedException {
-				System.out.println("Sleeping forever");
 				new CompletableFuture<String>().join();
 			}
 
 			public boolean isLowOnThreads() {
-				System.out.println("isLowOnThreads");
 				return false;
 			}
 
 			public int getThreads() {
-				System.out.println("getThreads");
 				return executor.getPoolSize();
 			}
 
 			public int getIdleThreads() {
-				System.out.println("getIdleThreads");
 				return executor.getPoolSize() - executor.getActiveCount();
 			}
 		};
@@ -105,35 +95,22 @@ public class App {
 	private static ThreadPool fiberPool() {
 		return new ThreadPool() {
 			public void execute(Runnable command) {
-				System.out.println("Executing via Fiber");
-				try {
-					java.lang.Fiber.schedule(() -> {
-						System.out.println("Executing INSIDE Fiber");
-						command.run();
-					    System.out.println("Executed INSIDE Fiber");
-					});
-				} catch(Throwable t) {
-					System.out.println("Exception: " + t.getMessage());
-				}
+				java.lang.Fiber.schedule(command);
 			}
 
 			public void join() throws InterruptedException {
-				System.out.println("Sleeping forever");
 				new CompletableFuture<String>().join();
 			}
 
 			public boolean isLowOnThreads() {
-				System.out.println("isLowOnThreads");
 				return false;
 			}
 
 			public int getThreads() {
-				System.out.println("getThreads");
 				return Integer.MAX_VALUE;
 			}
 
 			public int getIdleThreads() {
-				System.out.println("getIdleThreads");
 				return Integer.MAX_VALUE;
 			}
 		};

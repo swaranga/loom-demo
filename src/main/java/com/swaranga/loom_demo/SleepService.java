@@ -9,7 +9,7 @@ import javax.ws.rs.core.MediaType;
 @Path("sleep")
 public class SleepService {    
 	@GET
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
 	public String sleep(@QueryParam("millis") long millis) throws Exception {
 		if(millis == 0) {
 			millis = 100;
@@ -17,6 +17,6 @@ public class SleepService {
 		
 		Thread.sleep(millis);
 		
-		return "done";
+		return String.format("{\"sleep\": %s}", millis);
 	}
 }
