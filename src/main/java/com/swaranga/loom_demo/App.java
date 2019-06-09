@@ -62,7 +62,7 @@ public class App {
 			return fiberPool();
 
 		case thread:
-			new QueuedThreadPool(100);
+			return new QueuedThreadPool(100);
 
 		case custom:
 		default:
