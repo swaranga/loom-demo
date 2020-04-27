@@ -40,6 +40,9 @@ public class App {
 			server.start();
 
 			System.out.println("Server started");
+
+			new ThreadLogger().start();
+
 			server.join();
 		} catch (Exception ex) {
 			ex.printStackTrace();
